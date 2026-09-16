@@ -53,6 +53,11 @@
     <script>
 
         let members = [];
+        const urlParams = new URLSearchParams(window.location.search);
+const busNumber = urlParams.get("bus") || "1";
+
+document.querySelector("h1").textContent =
+    "🚌 รถทัวร์คันที่ " + busNumber;
 
         function addMember() {
 
