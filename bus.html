@@ -1,1 +1,159 @@
+<!DOCTYPE html>
+<html lang="th">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>สมาชิกในรถทัวร์</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+
+        <h1>🚌 รถทัวร์คันที่ 1</h1>
+
+        <p class="welcome">
+            ระบบเช็กชื่อสมาชิกในรถ
+        </p>
+
+        <div class="member-summary">
+            <p>👥 สมาชิกทั้งหมด: <span id="total">0</span> คน</p>
+            <p>✅ ขึ้นรถแล้ว: <span id="boarded">0</span> คน</p>
+            <p>⏳ ยังไม่ขึ้นรถ: <span id="notBoarded">0</span> คน</p>
+        </div>
+
+        <div class="add-member">
+
+            <input
+                type="text"
+                id="memberName"
+                placeholder="กรอกชื่อสมาชิก"
+            >
+
+            <button onclick="addMember()">
+                ➕ เพิ่มสมาชิก
+            </button>
+
+        </div>
+
+        <div id="memberList"></div>
+
+        <br>
+
+        <button onclick="goBack()">
+            ⬅️ กลับหน้ารถทัวร์
+        </button>
+
+    </div>
+
+    <script>
+
+        let members = [];
+
+        function addMember() {
+
+            const input = document.getElementById("memberName");
+
+            const name = input.value.trim();
+
+            if (name === "") {
+                alert("กรุณากรอกชื่อสมาชิก");
+                return;
+            }
+
+            members.push({
+                name: name,
+                boarded: false
+            });
+
+            input.value = "";
+
+            displayMembers();
+        }
+
+        function displayMembers() {
+
+            const list = document.getElementById("memberList");
+
+            list.innerHTML = "";
+
+            members.forEach((member, index) => {
+
+                const div = document.createElement("div");
+
+                div.className = "member-card";
+
+                div.innerHTML = `
+                    <strong>${member.name}</strong>
+
+                    <p>
+                        ${member.boarded
+                            ? "✅ ขึ้นรถแล้ว"
+                            : "⏳ ยังไม่ขึ้นรถ"}
+                    </p>
+
+                    <button onclick="toggleBoarding(${index})">
+                        ${member.boarded
+                            ? "เปลี่ยนเป็นยังไม่ขึ้นรถ"
+                            : "เช็กขึ้นรถ"}
+                    </button>
+
+                    <button onclick="deleteMember(${index})">
+                        🗑️ ลบ
+                    </button>
+                `;
+
+                list.appendChild(div);
+
+            });
+
+            updateSummary();
+        }
+
+        function toggleBoarding(index) {
+
+            members[index].boarded =
+                !members[index].boarded;
+
+            displayMembers();
+        }
+
+        function deleteMember(index) {
+
+            members.splice(index, 1);
+
+            displayMembers();
+        }
+
+        function updateSummary() {
+
+            const total = members.length;
+
+            const boarded =
+                members.filter(member => member.boarded).length;
+
+            const notBoarded =
+                total - boarded;
+
+            document.getElementById("total").textContent = total;
+
+            document.getElementById("boarded").textContent = boarded;
+
+            document.getElementById("notBoarded").textContent = notBoarded;
+        }
+
+        function goBack() {
+
+            window.location.href = "dashboard.html";
+
+        }
+
+    </script>
+
+</body>
+
+</html>
